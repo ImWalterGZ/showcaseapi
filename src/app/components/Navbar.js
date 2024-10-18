@@ -1,3 +1,23 @@
+import Link from "next/link";
+
+const links = [
+  {
+    label: "Home",
+    route: "/",
+  },
+  {
+    label: "pokellorch",
+    route: "/pokeseccion",
+  },
+  {
+    label: "Music",
+    route: "/music",
+  },
+  {
+    label: "Posts",
+    route: "/posts",
+  },
+];
 export default function Navbar() {
   return (
     <div className="w-full h-16 bg-neutral-300 flex flex-row px-2 py-2 justify-around items-center z-50 ">
@@ -20,9 +40,12 @@ export default function Navbar() {
 
         <h1 className="text-2xl text-neutral-800 font-semibold">WGZZZ</h1>
       </div>
-      <h3 className="text-xl font-sans text-gray-800 ">Music</h3>
-      <h3 className="text-xl font-serif text-gray-800 ">PokeYorch</h3>
-      <h3 className="text-xl font-mono text-gray-800 ">Movies</h3>
+
+      {links.map(({ label, route }) => (
+        <h3 className="text-xl font-mono text-gray-800" key={route}>
+          <Link href={route}> {label}</Link>
+        </h3>
+      ))}
     </div>
   );
 }
