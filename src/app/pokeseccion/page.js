@@ -1,13 +1,10 @@
-"use client";
 import Image from "next/image";
 import Pokecard from "/src/app/pokeseccion/Pokecard";
 
 export default async function PokeApi() {
   return (
     <div className="w-screen flex">
-      <div className="w-5/12 h-screen bg-slate-100 transform transition-all duration-200 hover:bg-slate-200 hover:shadow-2xl">
-        <Pokecard pokemonName="ditto" />
-      </div>
+      <div className="w-5/12 h-screen bg-slate-100 transform transition-all duration-200 hover:bg-slate-200 hover:shadow-2xl"></div>
       <div className="flex w-screen h-fullflex-row relative">
         <Image
           src="/pokekid.png"
