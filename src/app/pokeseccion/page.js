@@ -1,10 +1,11 @@
 // app/pokemon/page.js
 
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 const baseUrl = "https://pokeapi.co/api/v2/pokemon/";
 
-const getRandomPokemonId = () => Math.floor(Math.random() * 151) + 1;
+const getRandomPokemonId = () => Math.floor(Math.random() * 600) + 1;
 
 async function getPokemon() {
   const randomId = getRandomPokemonId();
@@ -22,6 +23,30 @@ async function getPokemon() {
   }
 }
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+const typeGradientColors = {
+  normal: "to-gray-400",
+  fire: "to-red-500",
+  water: "to-blue-500",
+  electric: "to-yellow-400",
+  grass: "to-green-500",
+  ice: "to-blue-300",
+  fighting: "to-red-700",
+  poison: "to-purple-500",
+  ground: "to-yellow-600",
+  flying: "to-indigo-400",
+  psychic: "to-pink-500",
+  bug: "to-green-400",
+  rock: "to-yellow-700",
+  ghost: "to-purple-700",
+  dragon: "to-indigo-700",
+  dark: "to-gray-700",
+  steel: "to-gray-500",
+  fairy: "to-pink-300",
+};
+
 export default async function PokemonPage() {
   const pokemon = await getPokemon();
 
@@ -29,74 +54,78 @@ export default async function PokemonPage() {
     notFound();
   }
 
+  // Get the color for the first type of the Pokemon
+  const primaryType = pokemon.types[0]?.type.name;
+  const gradientColor = typeGradientColors[primaryType] || "to-blue-400";
+
+  const typeColors = {
+    normal: "bg-gray-400",
+    fire: "bg-red-500",
+    water: "bg-blue-500",
+    electric: "bg-yellow-400",
+    grass: "bg-green-500",
+    ice: "bg-blue-300",
+    fighting: "bg-red-700",
+    poison: "bg-purple-500",
+    ground: "bg-yellow-600",
+    flying: "bg-indigo-400",
+    psychic: "bg-pink-500",
+    bug: "bg-green-400",
+    rock: "bg-yellow-700",
+    ghost: "bg-purple-700",
+    dragon: "bg-indigo-700",
+    dark: "bg-gray-700",
+    steel: "bg-gray-500",
+    fairy: "bg-pink-300",
+  };
+
   return (
-    <div className="mx-40 my-10">
-      <div>
-        <h1 className="text-2xl font-bold mb-4">{pokemon.name}</h1>
-        <img
-          src={pokemon.sprites.front_default}
-          alt={pokemon.name}
-          className="w-48 h-48"
-        />
-        <p>Height: {pokemon.height / 10} m</p>
-        <p>Weight: {pokemon.weight / 10} kg</p>
-        <p>Types: {pokemon.types.map((type) => type.type.name).join(", ")}</p>
+    <div
+      className={`min-h-screen bg-gradient-to-br from-neutral-900 ${gradientColor} p-4`}
+    >
+      <div className="flex flex-row h-screen justify-between items-center">
+        <div className="w-2/12 ml-12">
+          <h1 className="text-9xl font-bold text-white">
+            {capitalizeFirstLetter(pokemon.name)}
+          </h1>
+          <p className="text-md font-mono">
+            #{pokemon.id.toString().padStart(3, "0")}
+          </p>
+          <div className="flex justify-start space-x-2 my-4">
+            {pokemon.types.map((type) => (
+              <span
+                key={type.type.name}
+                className={`${
+                  typeColors[type.type.name] || "bg-gray-500"
+                } text-white px-3 py-1 rounded-full text-sm`}
+              >
+                {capitalizeFirstLetter(type.type.name)}
+              </span>
+            ))}
+          </div>
+          <div className=" p-2 my-4 rounded">
+            <p className="text-xl text-white">Height</p>
+            <p className="font-bold">{pokemon.height / 10} m</p>
+          </div>
+          <div className="p-2 my-4 rounded">
+            <p className="text-xl text-white">Weight</p>
+            <p className="font-bold">{pokemon.weight / 10} kg</p>
+          </div>
+        </div>
+        <div className="w-full ml-40 ">
+          <Image
+            src={
+              pokemon.sprites.other["official-artwork"].front_default ||
+              pokemon.sprites.front_default
+            }
+            alt={pokemon.name}
+            objectFit="contain"
+            className="p-4"
+            width={4000}
+            height={4000}
+          />
+        </div>
       </div>
     </div>
   );
 }
-
-// import Image from "next/image";
-// import Pokecard from "/src/app/pokeseccion/Pokecard";
-
-// export default async function PokeApi() {
-//   return (
-//     <div className="w-screen flex">
-//       <div className="w-5/12 h-screen bg-slate-100 transform transition-all duration-200 hover:bg-slate-200 hover:shadow-2xl"></div>
-//       <div className="flex w-screen h-fullflex-row relative">
-//         <Image
-//           src="/pokekid.png"
-//           width={600}
-//           height={600}
-//           style={{
-//             position: "absolute",
-//             zIndex: "50",
-//             top: "60%",
-//             left: "50%",
-//             transform: "translate(-50%, -50%)",
-//             dropShadow: "2px 2px #fff 5px",
-//           }}
-//         />
-//         <Image
-//           src="/pokelogo.png"
-//           width={1000}
-//           height={600}
-//           style={{
-//             position: "absolute",
-//             zIndex: "31",
-//             top: "60%",
-//             left: "50%",
-//             transform: "translate(-50%, -50%)",
-//           }}
-//         />
-
-//         <div className="w-1/12 h-screen bg-slate-100 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl"></div>
-//         <div className="w-1/12 h-screen bg-slate-800 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-slate-700 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-slate-600 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-slate-500 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-slate-400 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-slate-300 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-slate-200 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-neutral-200 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-neutral-300 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-neutral-400 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-neutral-500 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-neutral-600 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-neutral-700 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-neutral-800 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//         <div className="w-1/12 h-screen bg-neutral-900 transform transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:z-30"></div>
-//       </div>
-//     </div>
-//   );
-// }
